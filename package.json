@@ -1,0 +1,8 @@
+{
+  "name": "spine-webgl",
+  "version": "3.8.0",
+  "main": "lib/spine-webgl.js",
+  "description": "2D skeletal animation runtimes for Spine.",
+  "author": "Gourmet Edifice",
+  "private": true
+}

@@ -1,0 +1,6 @@
+src
+tsconfig.json
+lib/*.js.map
+*.tgz
+.vscode
+.yarn
