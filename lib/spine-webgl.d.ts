@@ -1650,23 +1650,23 @@ declare module spine.webgl {
 }
 declare module spine.webgl {
     class Shader implements Disposable, Restorable {
-        private vertexShader;
-        private fragmentShader;
+        protected vertexShader: string;
+        protected fragmentShader: string;
         static MVP_MATRIX: string;
         static POSITION: string;
         static COLOR: string;
         static COLOR2: string;
         static TEXCOORDS: string;
         static SAMPLER: string;
-        private context;
-        private vs;
-        private vsSource;
-        private fs;
-        private fsSource;
-        private program;
-        private tmp2x2;
-        private tmp3x3;
-        private tmp4x4;
+        protected context: ManagedWebGLRenderingContext;
+        protected vs: WebGLShader;
+        protected vsSource: string;
+        protected fs: WebGLShader;
+        protected fsSource: string;
+        protected program: WebGLProgram;
+        protected tmp2x2: Float32Array;
+        protected tmp3x3: Float32Array;
+        protected tmp4x4: Float32Array;
         getProgram(): WebGLProgram;
         getVertexShader(): string;
         getFragmentShader(): string;
@@ -1674,8 +1674,8 @@ declare module spine.webgl {
         getFragmentSource(): string;
         constructor(context: ManagedWebGLRenderingContext | WebGLRenderingContext, vertexShader: string, fragmentShader: string);
         private compile;
-        private compileShader;
-        private compileProgram;
+        protected compileShader(type: number, source: string): WebGLShader;
+        protected compileProgram(vs: WebGLShader, fs: WebGLShader): WebGLProgram;
         restore(): void;
         bind(): void;
         unbind(): void;
@@ -1784,6 +1784,52 @@ declare module spine.webgl {
         constructor(context: ManagedWebGLRenderingContext, twoColorTint?: boolean);
         draw(batcher: PolygonBatcher, skeleton: Skeleton, slotRangeStart?: number, slotRangeEnd?: number): void;
     }
+}
+declare module spine.webgl {
+    export class SpineShader extends spine.webgl.Shader {
+        name: string;
+        static built_in_code: {
+            vertex: {
+                head_point: string;
+                start_point: string;
+                end_point: string;
+                tail_point: string;
+            };
+            fragment: {
+                head_point: string;
+                start_point: string;
+                end_point: string;
+                tail_point: string;
+            };
+        };
+        static shader_vars: string[];
+        static shader_var_names: string[];
+        private static shader_vars_inv_lookup_data;
+        private static shader_vars_inv_lookup;
+        static spine_built_ins: string[];
+        protected compile_message: ShaderMessage;
+        static code_lineid(code: string, file_name: string): string;
+        protected processShader(type: number, source: string): string;
+        protected compileShader(type: number, source: string): WebGLShader;
+        protected compileProgram(vs: WebGLShader, fs: WebGLShader): WebGLProgram;
+    }
+    class ShaderMessage {
+        vertex: ErrorMessageElement[];
+        fragment: ErrorMessageElement[];
+        link_info: string;
+    }
+    class ErrorMessageElement {
+        file: string[];
+        line: number;
+        post_code: string;
+        code: string;
+        type: string;
+        syntax: string;
+        message: string;
+        shader_type: string;
+        toString: () => string;
+    }
+    export {};
 }
 declare module spine.webgl {
     class Vector3 {
