@@ -1359,6 +1359,64 @@ declare module spine {
     }
 }
 declare module spine {
+    export class UnityAtlas {
+        atlasList: UnityAtlasItem[];
+        atlasMap: {
+            [name: string]: number;
+        };
+        texture: any;
+        constructor(input: any);
+        getMesh(name: string, width: number, height: number, start_x?: number, start_y?: number, scale_x?: number, scale_y?: number, flip_x?: boolean, flip_y?: boolean): AtlasTextureMesh;
+        static load(loader: AssetManager, json_path: string, texture_path: string, success?: (path_json: string, path_texture: string, atlas: UnityAtlas) => void, error?: (path_json: string, path_texture: string, error: string) => void): void;
+    }
+    export class UnityFileData {
+        m_FileID: number;
+        m_PathID: number;
+    }
+    export class UnityAtlasItem {
+        name: string;
+        x: number;
+        y: number;
+        width: number;
+        height: number;
+        borderLeft: number;
+        borderRight: number;
+        borderTop: number;
+        borderBottom: number;
+        paddingLeft: number;
+        paddingRight: number;
+        paddingTop: number;
+        paddingBottom: number;
+        texture: any;
+        static fromJSON(input: UnityAtlasItem): UnityAtlasItem;
+        getMesh(_width: number, _height: number, _start_x?: number, _start_y?: number, _scale_x?: number, _scale_y?: number, _flip_x?: boolean, _flip_y?: boolean): AtlasTextureMesh;
+    }
+    class PointPos {
+        x: number;
+        y: number;
+        constructor(x: number, y: number);
+    }
+    class TexturePos {
+        meshPosition: PointPos;
+        texturePosition: PointPos;
+        constructor(meshPosition: PointPos, texturePosition: PointPos);
+    }
+    export class AtlasTextureMesh {
+        vertex: TexturePos[];
+        index: number[];
+        texture: any;
+    }
+    export class UnityAtlasData {
+        m_GameObject: UnityFileData;
+        m_Enabled: number;
+        m_Script: UnityFileData;
+        m_Name: string;
+        material: UnityFileData;
+        mSprites: UnityAtlasItem[];
+    }
+    export {};
+}
+declare module spine {
     class JitterEffect implements VertexEffect {
         jitterX: number;
         jitterY: number;
@@ -1830,6 +1888,39 @@ declare module spine.webgl {
         toString: () => string;
     }
     export {};
+}
+declare module spine.webgl {
+    class StringRenderer {
+        private context;
+        static QUAD_TRIANGLES: number[];
+        private vertices;
+        private vertexSize;
+        private twoColorTint;
+        private renderable;
+        private canvasTexture;
+        private textCanvas;
+        private colorCanvas;
+        private colorShader;
+        private textShader;
+        private cache_text;
+        constructor(context: ManagedWebGLRenderingContext, twoColorTint?: boolean);
+        colorToRGBA(color: string | CanvasGradient | CanvasPattern): number[];
+        private static getPowerOfTwo;
+        private measureText;
+        private createMultilineText;
+        private drawText;
+        draw(batcher: PolygonBatcher, characters: string, font?: string, scale?: number, x_pos?: number, y_pos?: number, textColor?: string | CanvasGradient | CanvasPattern, textHeight?: number, maxWidth?: number, res?: number): void;
+    }
+}
+declare module spine.webgl {
+    class UnityAtlasRenderer {
+        private vertices;
+        private vertexSize;
+        private twoColorTint;
+        private renderable;
+        constructor(context: ManagedWebGLRenderingContext, twoColorTint?: boolean);
+        draw(batcher: PolygonBatcher, atlasItem: spine.AtlasTextureMesh, input_texture?: GLTexture): void;
+    }
 }
 declare module spine.webgl {
     class Vector3 {
