@@ -1365,8 +1365,9 @@ declare module spine {
             [name: string]: number;
         };
         texture: any;
+        file_name: string;
         constructor(input: any);
-        getMesh(name: string, width: number, height: number, start_x?: number, start_y?: number, scale_x?: number, scale_y?: number, flip_x?: boolean, flip_y?: boolean): AtlasTextureMesh;
+        getMesh(name: string, width?: number, height?: number, start_x?: number, start_y?: number, scale_x?: number, scale_y?: number, flip_x?: boolean, flip_y?: boolean): AtlasTextureMesh;
         static load(loader: AssetManager, json_path: string, texture_path: string, success?: (path_json: string, path_texture: string, atlas: UnityAtlas) => void, error?: (path_json: string, path_texture: string, error: string) => void): void;
     }
     export class UnityFileData {
@@ -1389,7 +1390,7 @@ declare module spine {
         paddingBottom: number;
         texture: any;
         static fromJSON(input: UnityAtlasItem): UnityAtlasItem;
-        getMesh(_width: number, _height: number, _start_x?: number, _start_y?: number, _scale_x?: number, _scale_y?: number, _flip_x?: boolean, _flip_y?: boolean): AtlasTextureMesh;
+        getMesh(input_width?: number, input_height?: number, _start_x?: number, _start_y?: number, _scale_x?: number, _scale_y?: number, _flip_x?: boolean, _flip_y?: boolean): AtlasTextureMesh;
     }
     class PointPos {
         x: number;
@@ -1405,6 +1406,8 @@ declare module spine {
         vertex: TexturePos[];
         index: number[];
         texture: any;
+        width: number;
+        height: number;
     }
     export class UnityAtlasData {
         m_GameObject: UnityFileData;
@@ -1906,10 +1909,10 @@ declare module spine.webgl {
         constructor(context: ManagedWebGLRenderingContext, twoColorTint?: boolean);
         colorToRGBA(color: string | CanvasGradient | CanvasPattern): number[];
         private static getPowerOfTwo;
-        private measureText;
+        measureText(textToMeasure: string): number;
         private createMultilineText;
         private drawText;
-        draw(batcher: PolygonBatcher, characters: string, font?: string, scale?: number, x_pos?: number, y_pos?: number, textColor?: string | CanvasGradient | CanvasPattern, textHeight?: number, maxWidth?: number, res?: number): void;
+        draw(batcher: PolygonBatcher, characters: string, font?: string, scale?: number, x_pos?: number, y_pos?: number, textColor?: string | CanvasGradient | CanvasPattern, textHeight?: number, textAlignment?: CanvasTextAlign, maxWidth?: number, res?: number): void;
     }
 }
 declare module spine.webgl {
